@@ -1,0 +1,23 @@
+<h3>Chat</h3>
+<form id="chat-form">
+    <div>
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required>
+    </div>
+    <div>
+        <label for="message">Mensaje</label>
+        <input type="text" id="message" name="message" required>
+    </div>
+    <button>Enviar</button>
+</form>
+<ul id="list-chat">
+    <% if (chats.length) { %>
+        <% chats.forEach(function(chat) { %>
+            <li>
+                <span class="chat_email"><%= chat.email %></span>
+                <span class="chat_date"><%= chat.date %>:</span>
+                <span class="chat_message"><%= chat.message %></span>
+            </li>
+        <% }); %>
+    <% } %>
+</ul> 
