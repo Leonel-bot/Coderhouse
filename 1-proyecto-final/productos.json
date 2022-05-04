@@ -1,0 +1,68 @@
+[
+  {
+    "name": "Producto nuevo",
+    "description": "Descripcion",
+    "code": "ABC-123",
+    "price": 3000,
+    "stock": 10,
+    "image": "https://picsum.photos/200",
+    "create": 1651336713169,
+    "update": null,
+    "id": 1
+  },
+  {
+    "name": "Producto nuevo",
+    "description": "Descripcion",
+    "code": "ABC-123",
+    "price": 3000,
+    "stock": 10,
+    "image": "https://picsum.photos/200",
+    "create": 1651336713925,
+    "update": null,
+    "id": 2
+  },
+  {
+    "name": "Producto nuevo",
+    "description": "Descripcion",
+    "code": "ABC-123",
+    "price": 3000,
+    "stock": 10,
+    "image": "https://picsum.photos/200",
+    "create": 1651336714567,
+    "update": null,
+    "id": 3
+  },
+  {
+    "name": "Producto nuevo",
+    "description": "Descripcion",
+    "code": "ABC-123",
+    "price": 3000,
+    "stock": 10,
+    "image": "https://picsum.photos/200",
+    "create": 1651336715231,
+    "update": null,
+    "id": 4
+  },
+  {
+    "name": "Producto nuevo",
+    "description": "Descripcion",
+    "code": "ABC-123",
+    "price": 3000,
+    "stock": 10,
+    "image": "https://picsum.photos/200",
+    "create": 1651336715917,
+    "update": null,
+    "id": 5
+  },
+  {
+    "name": "Producto nuevo",
+    "description": "Descripcion",
+    "code": "ABC-123",
+    "price": 3000,
+    "stock": 10,
+    "image": "https://picsum.photos/200",
+    "create": 1651336716657,
+    "update": null,
+    "id": 6
+  }
+]
