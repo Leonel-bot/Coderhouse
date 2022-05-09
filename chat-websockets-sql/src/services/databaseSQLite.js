@@ -1,12 +1,8 @@
-const knex = require('knex')
+const knex = require('knex');
+const { option } = require('../options/sqlite');
 
 class DBLite {
-    constructor() {
-        const options = {
-            client: 'sqlite3',
-            connection: { filename: './DB/ecommerce.sqlite' },
-            useNullAsDefault: true,
-        };
+    constructor(options) {
         this.connection = knex(options);
     }
 
@@ -42,5 +38,7 @@ class DBLite {
     }
 }
 
-const DBLiteServices = new DBLite()
+const DBLiteServices = new DBLite(
+    options = option
+)
 module.exports = { DBLiteServices }

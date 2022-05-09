@@ -1,0 +1,150 @@
+> use ecommerce
+> const productoss = [
+    {
+        "nombre": "Escuadra",
+        "precio": 123.45,
+        "imagen": "https://cdn3.iconfinder.com/data/icons/education-209/64/ruler-triangle-stationary-school-256.png",
+    },
+    {
+        "nombre": "Pincel",
+        "precio": 4500.00,
+        "imagen": "https://cdn3.iconfinder.com/data/icons/education-209/64/ruler-triangle-stationary-school-256.png",
+    },
+    {
+        "nombre": "Cuaderno",
+        "precio": 500.40,
+        "imagen": "https://cdn3.iconfinder.com/data/icons/education-209/64/ruler-triangle-stationary-school-256.png",
+    },
+    {
+        "nombre": "Regla",
+        "precio": 3000.00,
+        "imagen": "https://cdn3.iconfinder.com/data/icons/education-209/64/ruler-triangle-stationary-school-256.png",
+    },
+    {
+        "nombre": "Lapiz",
+        "precio": 2560.00,
+        "imagen": "https://cdn3.iconfinder.com/data/icons/education-209/64/ruler-triangle-stationary-school-256.png",
+    },
+    {
+        "nombre": "Cartuchera",
+        "precio": 600.45,
+        "imagen": "https://cdn3.iconfinder.com/data/icons/education-209/64/ruler-triangle-stationary-school-256.png",
+    },
+    {
+        "nombre": "Tijera",
+        "precio": 230.00,
+        "imagen": "https://cdn3.iconfinder.com/data/icons/education-209/64/ruler-triangle-stationary-school-256.png",
+    },
+    {
+        "nombre": "Papel",
+        "precio": 100.00,
+        "imagen": "https://cdn3.iconfinder.com/data/icons/education-209/64/ruler-triangle-stationary-school-256.png",
+    },
+    {
+        "nombre": "Goma",
+        "precio": 30.00,
+        "imagen": "https://cdn3.iconfinder.com/data/icons/education-209/64/ruler-triangle-stationary-school-256.png",
+    },
+    {
+        "nombre": "Hoja",
+        "precio": 50.10,
+        "imagen": "https://cdn3.iconfinder.com/data/icons/education-209/64/ruler-triangle-stationary-school-256.png",
+    }
+]
+
+const mensajes = [
+    {
+        "email" : "email@gmail.com",
+        "mensaje": "Hola!",
+    },
+    {
+        "email" : "email@gmail.com",
+        "mensaje": "Hola!",
+    },
+    {
+        "email" : "email@gmail.com",
+        "mensaje": "Hola!",
+    },
+    {
+        "email" : "email@gmail.com",
+        "mensaje": "Hola!",
+    },
+    {
+        "email" : "email@gmail.com",
+        "mensaje": "Hola!",
+    },
+    {
+        "email" : "email@gmail.com",
+        "mensaje": "Hola!",
+    },
+    {
+        "email" : "email@gmail.com",
+        "mensaje": "Hola!",
+    },
+    {
+        "email" : "email@gmail.com",
+        "mensaje": "Hola!",
+    },
+    {
+        "email" : "email@gmail.com",
+        "mensaje": "Hola!",
+    },
+    {
+        "email" : "email@gmail.com",
+        "mensaje": "Hola!",
+    }
+]
+> db.productos.insertMany(productos)
+> db.mensajes.insertMany(mensajes)
+
+> db.productos.find()
+> db.mensajes.find()
+
+> db.productos.countDocuments({})
+> db.mensajes.countDocuments({})
+
+
+> db.productos.insertOne({"nombre": "Lapiz negro", "precio": 12, "imagen": "https://picsum.photos/200/300"})
+
+Productos con precio menor a 1000
+> db.productos.find({"precio": {$lt: 1000}})
+
+
+Productos con precio entre 1000 y 3000
+> db.productos.find({ $and: [{ "precio": {$gte: 1000}}, {"precio": {$lte: 3000}} ]})
+
+
+Productos con precio mayor a 3000
+> db.productos.find({"precio" : {$gt : 3000}})
+
+
+El nombre del tercer producto mas barato
+> db.productos.find({}, {nombre: true}).sort({precio: 1}).skip(2).limit(1)  
+
+
+Agrego stock a todos los productos
+db.productos.update({},{$set:{"stock": 100}},{upsert:false,multi:true})
+
+Productos con precio mayor a 4000 cambio el stock a 0
+> db.productos.update({"precio": {$gt: 4000}}, {$set: {"stock": 0}})
+
+
+Borro productos con precio menor a 1000
+db.productos.deleteMany({"precio": {$lt: 1000}})
+
+
+
+use admin
+
+
+const user = {
+    user: "pepe",
+    pwd: "asd456",
+    roles: [
+        {role: "read", db: "blog"}
+    ]
+}
+
+db.createUser(user)
+
+mongo -u "pepe"

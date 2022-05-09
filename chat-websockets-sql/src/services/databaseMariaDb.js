@@ -1,17 +1,8 @@
 const knex = require('knex')
+const {option} = require('../options/mysql')
 
 class DB {
-    constructor() {
-        const options = {
-            client: 'mysql',
-            connection: {
-                host: 'localhost',
-                port: 3306,
-                user: 'root',
-                password: '',
-                database: 'coderhouse'
-            }
-        };
+    constructor(options) {
         this.connection = knex(options);
     }
 
@@ -48,5 +39,7 @@ class DB {
     }
 }
 
-const DBServices = new DB()
+const DBServices = new DB(
+    options = option
+)
 module.exports = { DBServices }
