@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const connectionString = process.env.MONDODB
+const connectionString = process.env.MONGODB
 
 mongoose.connect(connectionString)
 .then(() => {
