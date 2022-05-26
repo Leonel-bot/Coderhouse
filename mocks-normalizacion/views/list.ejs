@@ -42,7 +42,7 @@
         <form id="chat-form">
             <div>
                 <label for="email">Email</label>
-                <input type="" id="email" name="email" required>
+                <input type="email" id="email" name="email" required>
             </div>
             <div>
                 <label for="message">Mensaje</label>
@@ -50,10 +50,23 @@
             </div>
             <button>Enviar</button>
         </form>
+        <ul id="list-chat">
+            <% if (chats.length) { %>
+                <% chats.forEach(function(chat) { %>
+                    <li>
+                        <span class="chat_email"><%= chat.author.nombre %></span>
+                        <span class="chat_date"><%= chat.createdAt %>:</span>
+                        <span class="chat_message"><%= chat.text %></span>
+                    </li>
+                <% }); %>
+            <% } %>
+        </ul> 
     </div>
+    
 
 
 
+    <script src="https://cdn.jsdelivr.net/npm/normalizr@3.6.1/dist/normalizr.browser.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="/public/js/socket-client.js"></script>
 </body>

@@ -1,23 +1,59 @@
 const socket = io.connect()
 
-const text = document.getElementById('message').value
-const id = document.getElementById('email').value
+const listChat = document.getElementById("list-chat")
+const message = document.getElementById('message')
+const email = document.getElementById('email')
 const form = document.getElementById('chat-form')
 form.addEventListener('submit', (ev) => {
     ev.preventDefault()
-    console.log('submit');
-    console.log(text, id);
+    const data = {id: email.value, text: email.value}
+    socket.emit('chat', data)
+    form.reset()
 })
-/* socketChat.on('response-chat', (data) => {
-    console.log(data);
-    addChatElement(JSON.parse(data))
-}) */
 
-/* const author = {
-    id,
-    nombre: faker.name.firstName(),
-    apellido: faker.name.lastName(),
-    edad: faker.finance.amount(18, 100),
-    alias: faker.name.firstName(),
-    avatar: faker.image.avatar()
-} */
+
+socket.on('response-chat', (data) => {
+    const chats = denormalizrChats(JSON.parse(data))
+    addChatElement(chats[chats.length-1])  
+})
+
+const addChatElement = (data) => {
+    const chat = data._doc
+    const li = document.createElement('li');
+    console.log(li);
+    const el = `<div>
+                    <span class="chat_email">${chat.author.nombre}</span>
+                    <span class="chat_date">${chat.createdAt}:</span>
+                    <span class="chat_message">${chat.text}</span>
+                </div>`
+    li.innerHTML = el;
+    listChat.appendChild(li);
+}
+
+
+const normalizrChats = (data) => {
+
+    const author = new normalizr.schema.Entity('authors', {}, {
+        idAttribute: 'email'
+    })
+
+    const chat = new normalizr.schema.Entity('chats', {
+        author: author
+    })
+
+    const finalSchema = [chat]
+    return normalize(data, finalSchema)
+}
+
+
+const denormalizrChats = (data) => {
+    const author = new normalizr.schema.Entity('authors', {}, {
+        idAttribute: 'email'
+    })
+
+    const chat = new normalizr.schema.Entity('chats', {
+        author: author
+    })
+    const finalSchema = [chat]
+    return normalizr.denormalize( data.result, finalSchema, data.entities);
+}

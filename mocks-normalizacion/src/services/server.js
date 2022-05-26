@@ -2,6 +2,7 @@ import { log } from 'console'
 import express from 'express'
 import http from 'http'
 import path from 'path'
+import { getChat } from '../controller/chats'
 import { get } from '../controller/products'
 import mainRouter from '../router/index'
 
@@ -16,9 +17,11 @@ app.set('views', viewsPath)
 
 
 app.use('/api', mainRouter)
+
 app.get('/', async (req, res) => {
     const products = await get()
-    res.render('list', {products: products})
+    const chats = await getChat()
+    res.render('list', {products: products, chats: chats})
 })
 
 
