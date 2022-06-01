@@ -11,7 +11,8 @@ formLogin.addEventListener('submit', (ev) => {
         body: JSON.stringify({username: username.value})
     }
     return fetch("http://localhost:8080/login", request)
-        .then(response => window.location.href = '/')
-        .catch(err => console.log(err))
+    .then(res => {
+        if(res.ok) window.location.href = '/'
+    })
     
 })

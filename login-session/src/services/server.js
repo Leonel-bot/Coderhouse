@@ -44,7 +44,7 @@ app.post('/login', (req, res) => {
             counter: 1,
             username: username
         }
-        res.redirect('/')
+        res.json({msg: 'Login!'})
     }
 })
 
