@@ -19,6 +19,9 @@ app.use(cookieParser());
 app.use(session(StoreOptions))
 app.use('/api', mainRouter)
 app.use('/public',express.static('public'))
+app.set('view engine', 'ejs')
+const viewsPath = path.resolve(__dirname, '../../views')
+app.set('views', viewsPath)
 
 //Iniciar passport
 app.use(passport.initialize())
@@ -30,24 +33,47 @@ passport.use('signup', userSignup)
 
 
 
-app.set('view engine', 'ejs')
-const viewsPath = path.resolve(__dirname, '../../views')
-app.set('views', viewsPath)
-
-
 
 app.get('/', authMiddleware, async (req, res) => {
     const products = await get()
     const chats = await getChat()
-    const username = req.session.info.username
+    const { username } = req.session.passport
     res.render('list', {products: products, chats: chats, username: username})
 })
 
-app.get('/login', async (req, res) => {
+app.get('/login', (req, res) => {
     res.render('login')
+})
+app.get('/signup', (req, res) => {
+    res.render('signup')
 })
 
 
+
+app.post('/signup', (req, res, next) => {
+    passport.authenticate('signup', {}, (err, user, info) => {
+        if(err){
+            return next(err)
+        }
+        if(!user) return res.status(401).json({data: info})
+        res.json({msg: 'Signup'})
+    })(req, res, next)
+})
+
+
+app.post('/login', passport.authenticate('login', {}),
+    (req, res ) => {
+        res.json({msg: 'wellcome'})
+    }
+)
+
+
+app.post('/logout', (req, res) => {
+    req.session.destroy((error) => {
+        if(error) res.status(404).send({msg: 'error'})
+        else res.send({msg: 'loguout ok'})
+    })
+})
 
 
 /* app.post('/login', (req, res) => {

@@ -1,5 +1,9 @@
 import passport from 'passport'
 import {Strategy} from 'passport-local'
+import { UserModel } from '../models/user';
+import bcrypt from  'bcrypt'
+
+
 
 const strategyOptions = {
     usernameField: 'username',
@@ -8,17 +12,25 @@ const strategyOptions = {
 }
 
 
-const login = async (req, username, password, done) => {
-    console.log('login');
-    try {
-        return done(null, false, {msg: 'Usuario no encontrado'})
-    } catch (error) {
-        return done(null, /* la respuesta */)
-    }
+const login = async (username, password, done) => {
+    
+    const user = await UserModel.findOne({username})
+    if(!user) return done(null, false, {msg: 'Usuario no encontrado'})
+
+    const isUser = await bcrypt.compare(password, user.password)
+    if(!isUser) return done(null, false, {msg: 'Error en credenciales'});
+    return done(null, user)
 }
 
-const signup = async (req, username, password, done) => {
-    console.log('signup');
+const signup = async (username, password, done) => {
+    try {
+        const passHash = await bcrypt.hash(password, 10)
+        const newUser = await UserModel.create({username, password: passHash})
+        return done(null, newUser)
+    } catch (error) {
+        console.log(error);
+        return done(null, false, {msg: 'Error', error})
+    }
 }
 
 
@@ -28,11 +40,9 @@ export const userSignup = new Strategy(strategyOptions, signup)
 
 
 passport.serializeUser((user, done) => {
-    done(null, user._id)
+    done(null, user)
 })
 
-passport.deserializeUser((userId, done) => {
-    /* UserModel.findById(userId).then(user => {
-        return done(null, user)
-    }) */
+passport.deserializeUser((user, done) => {
+    return done(null, user)
 })
