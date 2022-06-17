@@ -10,6 +10,7 @@ import { StoreOptions } from './session'
 import { authMiddleware } from '../middleware'
 import passport from 'passport'
 import { userLogin, userSignup } from './auth'
+import { exec } from 'child_process';
 
 const app = express()
 
@@ -26,7 +27,6 @@ app.set('views', viewsPath)
 //Iniciar passport
 app.use(passport.initialize())
 app.use(passport.session())
-
 
 passport.use('login', userLogin)
 passport.use('signup', userSignup)
@@ -76,24 +76,35 @@ app.post('/logout', (req, res) => {
 })
 
 
-/* app.post('/login', (req, res) => {
-    const {username} = req.body
-    if(username){
-        req.session.info = {
-            loggedIn: true,
-            counter: 1,
-            username: username
-        }
-        res.json({msg: 'Login!'})
+app.get('/info', (req, res) => {
+    const info = {
+        'Argumentos': process.argv,
+        'Plataforma' : process.platform,
+        'Node Version': process.version,
+        'Memoria reservada': process.memoryUsage().rss,
+        'Path ejecucion': process.execPath,
+        'Process ID': process.pid,
+        'Carpeta del proyecto': process.cwd()
     }
+    res.json(info)
 })
 
-app.post('/logout', (req, res) => {
-    req.session.destroy((error) => {
-        if(error) res.status(404).send({msg: 'error'})
-        else res.send({msg: 'loguout ok'})
-    })
+
+
+
+/* const command = 'ls -lh'
+exec(command, (err, stdout, stderr) => {
+    if(err){
+        console.log(`Error: ${err.message}`);
+        return
+    }
+    if(stderr){
+        console.log(`Stred:\n ${stderr}`);
+        return
+    }
+    console.log(stdout);
 }) */
+
 
 const httpServer = http.createServer(app)
 
