@@ -1,0 +1,56 @@
+{
+  "name": "login-passport-balance-de-carga",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "babel src --out-dir dist",
+    "start": "node ./dist/index.js",
+    
+    
+    
+    "start:fork": "pm2 start ./dist/index.js --name=process-fork --watch",
+    "start:cluster": "pm2 start ./dist/index.js --name=process-cluster --watch -i max",
+    "start:pm2": "pm2 start ecosystem.config.js",
+    
+    "start:forever": "npm run build && forever start dist/index.js",
+    "stop:forever": "forever stopall",
+    
+    "stop:fork": "pm2 stop process-fork",
+    "stop:cluster": "pm2 stop process-cluster",
+
+    "dev:cluster": "nodemon --exec babel-node ./src/index.js --port=8080 --mode=cluster",
+    "dev:fork": "nodemon --exec babel-node ./src/index.js --port=8080 --mode=fork"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/cli": "^7.14.8",
+    "@babel/core": "^7.15.0",
+    "@babel/node": "^7.14.9",
+    "@babel/preset-env": "^7.15.0",
+    "nodemon": "^2.0.16"
+  },
+  "dependencies": {
+    "@faker-js/faker": "^6.3.1",
+    "bcrypt": "^5.0.1",
+    "connect-mongo": "^4.6.0",
+    "cookie-parser": "^1.4.6",
+    "dotenv": "^16.0.1",
+    "ejs": "^3.1.6",
+    "express": "^4.18.1",
+    "express-session": "^1.17.3",
+    "forever": "^4.0.3",
+    "minimist": "^1.2.6",
+    "mongoose": "^6.3.3",
+    "normalizr": "^3.6.2",
+    "os": "^0.1.2",
+    "passport": "^0.6.0",
+    "passport-local": "^1.0.0",
+    "pm2": "^5.2.0",
+    "session-file-store": "^1.5.0",
+    "socket.io": "^4.5.1"
+  }
+}
