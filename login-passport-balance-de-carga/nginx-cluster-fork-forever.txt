@@ -1,0 +1,70 @@
+Ejecutar el servidor en modo CLUSTER
+npm run dev:cluster
+
+Ejecutar el servidor modo FORK
+npm run dev:fork
+
+
+Ejecutar el servidor con forever
+npm run start:forever
+
+Parar el servidor de forever
+npm run stop:forever
+
+
+Ejecutar modo PM2
+CLUSTER: npm run start:cluster
+FORK:    npm run start:fork
+
+Parar servidor PM2
+CLUSTER : npm run stop:cluster
+FORK : 	  npm run stop:fork
+TODOS :   pm2 delete all
+
+
+
+Ejecutar servidor con balanceo de carga
+npm run start:pm2
+
+
+
+
+NGINX CONFIG
+
+events {
+
+}
+
+http {
+
+
+    include       mime.types;
+
+    upstream backend{
+        server localhost:8082;
+        server localhost:8083;
+        server localhost:8084;
+        server localhost:8085;
+    }
+
+    server {
+
+        listen 80;
+        server_name nginx-handbook.test;
+
+        #return 200 "Server in port 80\n";
+        
+        #location / {
+        #    root   html;
+        #    index  index.html index.htm;
+        #}
+
+        location /info {
+            proxy_pass http://backend;
+        }
+        location / {
+            proxy_pass http://localhost:8080;
+        }
+    }
+
+}
