@@ -4,10 +4,8 @@ import express from "express";
 import http from "http"
 
 const app = express()
-
-
-
 app.use(compression())
+
 app.use(express.json())
 
 const httpServer = http.Server(app)
