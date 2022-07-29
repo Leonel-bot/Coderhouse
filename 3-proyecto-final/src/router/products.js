@@ -1,14 +1,15 @@
 import { Router } from "express";
-import { get, remove, save, update } from "../controller/products";
+import ProductController from "../controller/product"
 import { authMiddleware } from "../middleware";
 
 const router = Router()
 
-router.get('/', get)
-router.get('/:id', get)
-router.post('/', save)
-router.put('/:id', update)
-router.delete('/:id', remove)
+router.get('/', ProductController.get)
+router.get('/:id', ProductController.get)
+router.post('/', ProductController.save)
+router.put('/:id', ProductController.update)
+router.delete('/:id', ProductController.remove)
+
 
 
 export default router

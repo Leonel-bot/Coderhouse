@@ -13,12 +13,7 @@ export const sendEmailNewRegister = async (user) => {
     <p>Edad: ${user.age}</p>
     <p>Direccion: ${user.address}</p>
     `
-    try {
-        const response = await sendEmail(dest, subject, content)
-        return response
-    } catch (error) {
-        return false
-    }
+    return await sendEmail(dest, subject, content)
 }
 
 
@@ -36,13 +31,5 @@ export const sendEmailOrder = async (user, products) => {
     <p style="text-decoration:underline;">Productos</p>
     <ul style="padding: 0;list-style-type: none;">${products.map(product => (`<li>${product.name} - ${product.price}</li>`))}</ul>`
 
-    try {
-        const response = await sendEmail(dest, subject, content)
-        return response
-    } catch (error) {
-        return false
-    }
-
-
-
+    return await sendEmail(dest, subject, content)
 }

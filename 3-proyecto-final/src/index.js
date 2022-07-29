@@ -1,3 +1,5 @@
+import "core-js/modules/es.promise";
+import "core-js/modules/es.array.iterator";
 import 'dotenv/config'
 import server from './services/server'
 import './services/mongo'

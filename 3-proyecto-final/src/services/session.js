@@ -4,7 +4,7 @@ import 'dotenv/config'
 import MongoStore from 'connect-mongo'
 
 
-const ttlSeconds = 180;
+const ttlSeconds = 1800;
 
 export const StoreOptions = {
   store: MongoStore.create({

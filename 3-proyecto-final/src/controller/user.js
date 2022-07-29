@@ -1,48 +1,101 @@
-import { UserModel } from "../models/users";
-import { CartModel } from "../models/carts";
+import UserApi from "../api/user"
+import CartApi from "../api/cart"
 import bcrypt from 'bcrypt'
-import passport from 'passport'
-import { Strategy } from 'passport-local'
 import { sendEmailNewRegister, sendEmailOrder } from "./email";
 import { sendMessage, sendWhatsAppMessage } from "../services/twilio";
 import { Config } from "../config";
+import createError from "http-errors";
 
 
 
-const strategyOptions = {
-    usernameField: 'username',
-    passwordField: 'password',
-    passportReqToCallback: true
-}
-
-export const get = async (req, res) => {
+const get = async (req, res) => {
     const { id } = req.params
-    let user = null
-    id ? user = await UserModel.findById(id).populate('cart') : user = await UserModel.find()
-    res.json(user)
+    const user = await UserApi.get(id)
+    res.json({response: user})
 }
 
 
-export const save = async (req, res) => {
+const save = async (req, res) => {
     const { body } = req
     try {
 
+        const cart = await CartApi.save({ products: [] })
+
         const passHash = await bcrypt.hash(body.password, 10)
-        const cartModel = new CartModel({ products: [] })
-
-        const userModel = new UserModel({ ...body, password: passHash, cart: cartModel._id });
-
-        await CartModel.create(cartModel)
-        const user = await UserModel.create(userModel)
-        
+        const user = await UserApi.save({ ...body, password: passHash, cart: cart._id })
+       
         await sendEmailNewRegister(user)
         
-
-        res.json({ success: true, response: user })
+        res.json({ response: user })
 
     } catch (error) {
-        res.json({ success: false, response: error })
+        res.json({error : createError(400, error)})
     }
+}
+
+const update = async (req, res) => {
+    const {id} = req.params
+    const {body} = req
+    try {
+        const user = await UserApi.update(id, body)
+        res.json({response: user})
+    } catch (error) {
+        res.json({error : createError(400, error)})
+    }
+
+}
+
+const remove = async (req, res) => {
+    const {id} = req.params
+    try {
+        await UserApi.remove(id)
+        res.json(true)
+    } catch (error) {
+        res.json({error : createError(400, error)})
+    }
+}
+
+const createOrder = async (req, res) => {
+    const {passport} = req.session
+    const userId = passport.user
+    
+    const user = await UserApi.get(userId)
+
+    const cart = await CartApi.get(user.cart._id)
+
+    const {products} = cart
+    if(!products.length) res.json({error : createError(400, 'empty cart')})
+    
+    await sendEmailOrder(user, products)
+    await sendMessage(`+54${user.phone}`, 'Su pedido ha sido recibido y se encuentra en proceso')
+   
+    await sendWhatsAppMessage(Config.ADMIN_CELLPHONE, `Nuevo pedido de ${user.username}`)
+    
+    res.json({user, products: products})
+}
+
+export default {
+    get,
+    save,
+    update,
+    remove,
+    createOrder
+}
+
+
+
+
+
+
+
+
+
+
+
+/* const strategyOptions = {
+    usernameField: 'username',
+    passwordField: 'password',
+    passportReqToCallback: true
 }
 
 
@@ -55,23 +108,6 @@ export const login = async (username, password, done) => {
     return done(null, user)
 }
 
-
-export const createOrder = async (req, res) => {
-    const {passport} = req.session
-    const userId = passport.user
-    const user = await UserModel.findById(userId)
-    const cart = await CartModel.findById(user.cart).populate('products')
-
-    await sendEmailOrder(user, cart.products)
-    await sendMessage(`+54${user.phone}`, 'Su pedido ha sido recibido y se encuentra en proceso')
-   
-    await sendWhatsAppMessage(Config.ADMIN_CELLPHONE, `Nuevo pedido de ${user.username}`)
-    
-    res.json({user, products: cart.products})
-} 
-
-
-
 export const userLogin = new Strategy(strategyOptions, login)
 
 
@@ -81,4 +117,4 @@ passport.deserializeUser((userId, done) => {
     UserModel.findById(userId).then((user) => {
       return done(null, user);
     })
-});
+}); */
