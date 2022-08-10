@@ -16,10 +16,12 @@ const update = (id, body) => ProductModel.findByIdAndUpdate(id, body, {new: true
 
 const remove = (id) =>  ProductModel.findByIdAndRemove(id)
 
+const deleteMany = () => ProductModel.deleteMany()
 
 export default {
     get,
     save,
     update,
-    remove
+    remove,
+    deleteMany
 };

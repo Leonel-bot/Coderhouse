@@ -6,6 +6,7 @@ import { StoreOptions } from './session'
 import passport from 'passport'
 import router from "../router/index";
 import { userLogin } from "./auth";
+import createError from "http-errors";
 
 const app = express()
 
@@ -15,6 +16,7 @@ app.use(cookieParser());
 app.use(session(StoreOptions))
 
 app.use('/api', router)
+app.use((req, res) => res.json({error : createError(400, 'Ruta no encontrada')}));
 
 //Iniciar passport
 app.use(passport.initialize())
